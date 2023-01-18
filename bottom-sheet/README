@@ -1,0 +1,10 @@
+1) A non-blocking bottom sheet. When we tap on non-bottom sheet item, the tapped
+item will get focus and bottom sheet will hide.
+
+2) Round corner bottom sheet.
+
+3) Fixed height bottom sheet.
+
+4) Non-draggable bottom sheet.
+
+5) Content in the bottom sheet is scrollable.
