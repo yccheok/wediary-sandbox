@@ -1,0 +1,5 @@
+<resources>
+    <style name="BottomSheetDialogStyle" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="behavior_draggable">false</item>
+    </style>
+</resources>
