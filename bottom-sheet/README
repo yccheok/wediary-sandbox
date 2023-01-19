@@ -6,9 +6,9 @@
 
 4) Content in the bottom sheet is scrollable.
 
-5) A non-blocking bottom sheet. When we tap on non-bottom sheet item, the tapped
-item will get focus and bottom sheet will hide.
+5) Hide bottom sheet when we tap on non-bottom sheet item.
 
-6) Hide bottom sheet when we tap on non-bottom sheet item.
+6) Hide sheet when we press on back button.
 
-7) Hide sheet when we press on back button.
+7) A non-blocking bottom sheet. When we tap on non-bottom sheet item, the tapped item will get focus
+and bottom sheet will hide.

@@ -21,12 +21,16 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.image_button_1).setOnClickListener(view -> demo1());
 
+        // 7) A non-blocking bottom sheet. When we tap on non-bottom sheet item, the tapped item
+        // will get focus and bottom sheet will hide.
         findViewById(R.id.edit_text_0).setOnFocusChangeListener((view, b) -> {
             if (b) {
                 hideBottomSheet();
             }
         });
 
+        // 7) A non-blocking bottom sheet. When we tap on non-bottom sheet item, the tapped item
+        // will get focus and bottom sheet will hide.
         findViewById(R.id.edit_text_1).setOnFocusChangeListener((view, b) -> {
             if (b) {
                 hideBottomSheet();
@@ -41,8 +45,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void demo1() {
+        // 1) Round corner bottom sheet.
         View view = findViewById(R.id.bottom_sheet_layout_2);
 
+        /*
+        2) Fixed height bottom sheet.
+
+        3) Non-draggable bottom sheet.
+
+        4) Content in the bottom sheet is scrollable.
+         */
         this.bottomSheetBehavior = BottomSheetBehavior.from(view);
 
         bottomSheetBehavior.setPeekHeight(900, true);
@@ -61,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // 5) Hide bottom sheet when we tap on non-bottom sheet item.
         if (hideBottomSheet()) {
             return;
         }
@@ -70,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // 6) Hide sheet when we press on back button.
         hideBottomSheet();
 
         return super.onTouchEvent(event);

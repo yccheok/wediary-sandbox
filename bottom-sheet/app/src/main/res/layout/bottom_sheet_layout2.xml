@@ -9,7 +9,7 @@
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
 
-    android:background="#f0f0f0"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
