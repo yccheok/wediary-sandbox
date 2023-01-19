@@ -48,7 +48,7 @@ public class DemoBottomDialogFragment extends BottomSheetDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Make the bottom sheet non dragable.
+        // Make the bottom sheet non drag-able.
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogStyle);
     }
 
