@@ -15,6 +15,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int systemBarsHeight = 0;
     private int keyboardHeightWhenVisible = 0;
     private boolean keyboardVisible = false;
 
@@ -30,14 +31,11 @@ public class MainActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
             boolean imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
 
-            // https://stackoverflow.com/questions/75325095/how-to-use-windowinsetscompat-correctly-to-listen-to-keyboard-height-change-in-a
-            int imeHeight =
-                    insets.getInsets(WindowInsetsCompat.Type.ime()).bottom -
-                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+            systemBarsHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
 
             keyboardVisible = imeVisible;
             if (keyboardVisible) {
-                keyboardHeightWhenVisible = imeHeight;
+                keyboardHeightWhenVisible = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
             }
 
             // https://stackoverflow.com/questions/75325095/how-to-use-windowinsetscompat-correctly-to-listen-to-keyboard-height-change-in-a
@@ -62,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 if (imeAnimation != null) {
                     int keyboardViewHeight;
                     if (keyboardVisible) {
-                        keyboardViewHeight = (int) (keyboardHeightWhenVisible * imeAnimation.getInterpolatedFraction());
+                        keyboardViewHeight = (int) (keyboardHeightWhenVisible * imeAnimation.getInterpolatedFraction()) - systemBarsHeight;
                     } else {
-                        keyboardViewHeight = (int) (keyboardHeightWhenVisible * (1.0-imeAnimation.getInterpolatedFraction()));
+                        keyboardViewHeight = (int) (keyboardHeightWhenVisible * (1.0-imeAnimation.getInterpolatedFraction())) - systemBarsHeight;
                     }
 
+                    keyboardViewHeight = Math.max(0, keyboardViewHeight);
+                    
                     ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
                     params.height = keyboardViewHeight;
                     keyboardView.setLayoutParams(params);
