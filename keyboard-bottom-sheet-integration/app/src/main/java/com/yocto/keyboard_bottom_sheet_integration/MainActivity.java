@@ -22,9 +22,15 @@ public class MainActivity extends AppCompatActivity {
 
         View keyboardView = findViewById(R.id.keyboard_view);
 
-        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView().getRootView(), (v, insets) -> {
+        View rootView = getWindow().getDecorView().getRootView();
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
             boolean imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
-            int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+
+            // https://stackoverflow.com/questions/75325095/how-to-use-windowinsetscompat-correctly-to-listen-to-keyboard-height-change-in-a
+            int imeHeight =
+                    insets.getInsets(WindowInsetsCompat.Type.ime()).bottom -
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
 
             android.util.Log.i("CHEOK", "imeVisible = " + imeVisible + ", imeHeight = " + imeHeight);
 
@@ -32,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
             params.height = imeHeight;
             keyboardView.setLayoutParams(params);
 
-            return insets;
+            // https://stackoverflow.com/questions/75325095/how-to-use-windowinsetscompat-correctly-to-listen-to-keyboard-height-change-in-a
+            return ViewCompat.onApplyWindowInsets(v, insets);
         });
     }
 }
