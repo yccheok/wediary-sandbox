@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
             if (keyboardVisible) {
                 keyboardHeightWhenVisible = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
 
-                keyboardView.removeAllViews();
+                if (keyboardView.getChildCount() > 0) {
+                    slideDownThenRemoveAllViews();
+                }
 
                 handlePickerAfterKeyboardHeight();
             }
@@ -114,6 +118,31 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
         ViewCompat.setWindowInsetsAnimationCallback(rootView, callback);
 
+    }
+
+    private void slideDownThenRemoveAllViews() {
+        View view = keyboardView.getChildAt(0);
+
+        Animation slideDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+
+        slideDown.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                keyboardView.removeAllViews();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        view.startAnimation(slideDown);
     }
 
     private void showKeyboard() {
