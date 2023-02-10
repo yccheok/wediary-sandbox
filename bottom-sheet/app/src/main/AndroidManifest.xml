@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bottomsheet"
         tools:targetApi="31">
+
+        <!-- Use android:windowSoftInputMode="adjustPan" if you do not want Activity resizing -->
+        
         <activity
             android:name=".MainActivity"
             android:exported="true">
