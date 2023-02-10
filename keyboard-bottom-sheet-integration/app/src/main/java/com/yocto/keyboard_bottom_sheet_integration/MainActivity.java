@@ -54,8 +54,12 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
             keyboardVisible = imeVisible;
 
+            Log.i("CHEOK", "init keyboardVisible = " + keyboardVisible);
+
             if (keyboardVisible) {
                 keyboardHeightWhenVisible = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+
+                keyboardView.removeAllViews();
 
                 handlePickerAfterKeyboardHeight();
             }
@@ -71,8 +75,14 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
             @NonNull
             @Override
             public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
-                if (keyboardView.getChildCount() > 0) {
-                    return insets;
+                if (keyboardVisible) {
+                    if (keyboardView.getHeight() == getGoodKeyboardViewHeight()) {
+                        return insets;
+                    }
+                } else {
+                    if (keyboardView.getChildCount() > 0) {
+                        return insets;
+                    }
                 }
 
                 // Find an IME animation.
@@ -96,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
                     ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
                     params.height = keyboardViewHeight;
                     keyboardView.setLayoutParams(params);
-
-                    Log.i("CHEOK", "keyboardViewHeight = " + keyboardViewHeight);
                 }
                 return insets;
 
@@ -142,13 +150,17 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
         return false;
     }
 
+    private int getGoodKeyboardViewHeight() {
+        return (keyboardHeightWhenVisible - systemBarsHeight);
+    }
+
     private void backgroundPicker() {
         if (handleCaseWhenKeyboardHeightIsNotReady(Picker.Background)) {
             return;
         }
 
         ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
-        params.height = (keyboardHeightWhenVisible - systemBarsHeight);
+        params.height = getGoodKeyboardViewHeight();
         keyboardView.setLayoutParams(params);
 
         BackgroundPicker backgroundPicker = new BackgroundPicker(this, this);
@@ -164,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
         }
 
         ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
-        params.height = (keyboardHeightWhenVisible - systemBarsHeight);
+        params.height = getGoodKeyboardViewHeight();
         keyboardView.setLayoutParams(params);
 
         EmojiPicker emojiPicker = new EmojiPicker(this, this);
