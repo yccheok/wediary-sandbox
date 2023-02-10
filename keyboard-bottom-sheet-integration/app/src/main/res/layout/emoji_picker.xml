@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top_linear_layout"
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="#22000000">
+
+        <ImageButton
+            android:id="@+id/image_button_0"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/actionBarItemBackground"
+            android:src="@drawable/ic_baseline_directions_car_24" />
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/keyboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#00ffff" />
+</merge>
