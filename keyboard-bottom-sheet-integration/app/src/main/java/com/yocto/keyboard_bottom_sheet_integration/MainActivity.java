@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,18 +14,36 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PickerListener {
 
     private int systemBarsHeight = 0;
     private int keyboardHeightWhenVisible = 0;
     private boolean keyboardVisible = false;
+
+    private FrameLayout keyboardView;
+
+    private Picker pickerAfterKeyboardHeight = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final View keyboardView = findViewById(R.id.keyboard_view);
+        keyboardView = findViewById(R.id.keyboard_view);
+
+        findViewById(R.id.image_button_0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                backgroundPicker();
+            }
+        });
+
+        findViewById(R.id.image_button_1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                emojiPicker();
+            }
+        });
 
         final View rootView = getWindow().getDecorView().getRootView();
 
@@ -34,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
             systemBarsHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
 
             keyboardVisible = imeVisible;
+
             if (keyboardVisible) {
                 keyboardHeightWhenVisible = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+
+                handlePickerAfterKeyboardHeight();
             }
 
             // https://stackoverflow.com/questions/75325095/how-to-use-windowinsetscompat-correctly-to-listen-to-keyboard-height-change-in-a
@@ -49,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
             @NonNull
             @Override
             public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
+                if (keyboardView.getChildCount() > 0) {
+                    return insets;
+                }
+
                 // Find an IME animation.
                 WindowInsetsAnimationCompat imeAnimation = null;
                 for (WindowInsetsAnimationCompat animation : runningAnimations) {
@@ -79,6 +105,77 @@ public class MainActivity extends AppCompatActivity {
         };
 
         ViewCompat.setWindowInsetsAnimationCallback(rootView, callback);
+
+    }
+
+    private void showKeyboard() {
+        final View rootView = getWindow().getDecorView().getRootView();
+
+        ViewCompat.getWindowInsetsController(rootView).show(WindowInsetsCompat.Type.ime());
+    }
+
+    private void hideKeyboard() {
+        final View rootView = getWindow().getDecorView().getRootView();
+
+        ViewCompat.getWindowInsetsController(rootView).hide(WindowInsetsCompat.Type.ime());
+    }
+
+    private void handlePickerAfterKeyboardHeight() {
+        if (pickerAfterKeyboardHeight == Picker.Emoji) {
+            emojiPicker();
+        } else if (pickerAfterKeyboardHeight == Picker.Background) {
+            backgroundPicker();
+        }
+
+        pickerAfterKeyboardHeight = null;
+    }
+
+    private boolean handleCaseWhenKeyboardHeightIsNotReady(Picker picker) {
+        if (keyboardHeightWhenVisible <= 0) {
+            this.pickerAfterKeyboardHeight = picker;
+
+            showKeyboard();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void backgroundPicker() {
+        if (handleCaseWhenKeyboardHeightIsNotReady(Picker.Background)) {
+            return;
+        }
+
+        ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
+        params.height = (keyboardHeightWhenVisible - systemBarsHeight);
+        keyboardView.setLayoutParams(params);
+
+        BackgroundPicker backgroundPicker = new BackgroundPicker(this, this);
+        keyboardView.removeAllViews();
+        keyboardView.addView(backgroundPicker);
+
+        hideKeyboard();
+    }
+
+    private void emojiPicker() {
+        if (handleCaseWhenKeyboardHeightIsNotReady(Picker.Emoji)) {
+            return;
+        }
+
+        ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
+        params.height = (keyboardHeightWhenVisible - systemBarsHeight);
+        keyboardView.setLayoutParams(params);
+
+        EmojiPicker emojiPicker = new EmojiPicker(this, this);
+        keyboardView.removeAllViews();
+        keyboardView.addView(emojiPicker);
+
+        hideKeyboard();
+    }
+
+    @Override
+    public void onPickerClosed() {
 
     }
 }
