@@ -1,5 +1,8 @@
 package com.yocto.keyboard_bottom_sheet_integration;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -213,6 +216,62 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
         keyboardView.addView(emojiPicker);
 
         hideKeyboard();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!keyboardVisible) {
+            if (keyboardView.getChildCount() > 0) {
+                shrinkHeightThenRemoveAllViews();
+                return;
+            }
+        }
+
+        super.onBackPressed();
+    }
+
+    private void shrinkHeightThenRemoveAllViews() {
+        ValueAnimator shrinkAnimator = ValueAnimator
+                .ofInt(keyboardView.getHeight(), 0)
+                .setDuration(150);
+
+        shrinkAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                Integer value = (Integer) valueAnimator.getAnimatedValue();
+                keyboardView.getLayoutParams().height = value.intValue();
+                keyboardView.requestLayout();
+            }
+        });
+
+
+        AnimatorSet animationSet = new AnimatorSet();
+        animationSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(@NonNull Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(@NonNull Animator animator) {
+                keyboardView.removeAllViews();
+            }
+
+            @Override
+            public void onAnimationCancel(@NonNull Animator animator) {
+                keyboardView.removeAllViews();
+            }
+
+            @Override
+            public void onAnimationRepeat(@NonNull Animator animator) {
+
+            }
+        });
+
+        // animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        animationSet.play(shrinkAnimator);
+        animationSet.start();
     }
 
     @Override
