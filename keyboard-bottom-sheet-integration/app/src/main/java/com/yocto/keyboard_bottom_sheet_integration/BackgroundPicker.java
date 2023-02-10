@@ -6,27 +6,13 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
-public class BackgroundPickerLinearLayout extends LinearLayout {
-    public BackgroundPickerLinearLayout(Context context) {
+public class BackgroundPicker extends LinearLayout {
+    private final PickerListener pickerListener;
+
+    public BackgroundPicker(Context context, PickerListener pickerListener) {
         super(context);
 
-        init();
-    }
-
-    public BackgroundPickerLinearLayout(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-
-        init();
-    }
-
-    public BackgroundPickerLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
-        init();
-    }
-
-    public BackgroundPickerLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        this.pickerListener = pickerListener;
 
         init();
     }
@@ -35,5 +21,7 @@ public class BackgroundPickerLinearLayout extends LinearLayout {
         inflate(getContext(), R.layout.background_picker, this);
 
         setOrientation(VERTICAL);
+
+        findViewById(R.id.image_button_0).setOnClickListener(view -> pickerListener.onPickerClosed());
     }
 }
