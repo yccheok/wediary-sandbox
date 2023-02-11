@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <ScrollView
-        android:id="@+id/scroll_view"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="false"
+    android:layout_height="match_parent">
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <EditText
-                android:padding="16dp"
-                android:scrollbars="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top" />
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:src="@drawable/a"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
-        android:id="@+id/bottom_linear_layout"
-
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal"
-        android:background="#22000000">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-        <ImageButton
-            android:id="@+id/image_button_0"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/actionBarItemBackground"
-            android:src="@drawable/ic_baseline_alarm_on_24" />
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <EditText
+                    android:padding="16dp"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top" />
+            </LinearLayout>
+        </ScrollView>
 
-        <ImageButton
-            android:id="@+id/image_button_1"
-            android:layout_width="48dp"
+        <LinearLayout
+            android:id="@+id/bottom_linear_layout"
+
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="?attr/actionBarItemBackground"
-            android:src="@drawable/ic_baseline_alarm_on_24" />
+            android:orientation="horizontal"
+            android:background="#d0d0d0">
+
+            <ImageButton
+                android:id="@+id/image_button_0"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/actionBarItemBackground"
+                android:src="@drawable/ic_baseline_alarm_on_24" />
+
+            <ImageButton
+                android:id="@+id/image_button_1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/actionBarItemBackground"
+                android:src="@drawable/ic_baseline_alarm_on_24" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:background="#d0d0d0"
+            android:id="@+id/keyboard_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
     </LinearLayout>
-
-    <FrameLayout
-        android:background="#22000000"
-        android:id="@+id/keyboard_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
-</LinearLayout>
+</FrameLayout>
