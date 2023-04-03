@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
                 // Enable adjustPan.
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             }
-            
+
             @NonNull
             @Override
             public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
@@ -291,6 +291,6 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
     @Override
     public void onPickerClosed() {
-
+        showKeyboard();
     }
 }
