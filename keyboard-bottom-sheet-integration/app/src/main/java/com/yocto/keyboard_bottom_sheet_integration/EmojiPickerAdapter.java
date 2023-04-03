@@ -1,14 +1,11 @@
+package com.yocto.keyboard_bottom_sheet_integration;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.yocto.keyboard_bottom_sheet_integration.EmojiCategory;
-import com.yocto.keyboard_bottom_sheet_integration.R;
 
 public class EmojiPickerAdapter extends RecyclerView.Adapter<EmojiPickerAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
