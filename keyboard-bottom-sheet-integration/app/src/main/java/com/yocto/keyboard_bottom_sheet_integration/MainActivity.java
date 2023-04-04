@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,17 +27,53 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
     private int keyboardHeightWhenVisible = 0;
     private boolean keyboardVisible = false;
 
-    private FrameLayout keyboardView;
+    private FrameLayout pickerFrameLayout;
+    private LinearLayout bottomLinearLayout;
 
     private Picker pickerAfterKeyboardHeight = null;
+
+    private static void setMargins(View v, int l, int t, int r, int b) {
+        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+        p.setMargins(l, t, r, b);
+        v.requestLayout();
+    }
+
+    private boolean hasPickerLayout() {
+        return pickerFrameLayout.getChildCount() > 1;
+    }
+
+    private View getPickerLayout() {
+        return pickerFrameLayout.getChildAt(1);
+    }
+
+    private void addPickerLayout(PickerLayout pickerLayout) {
+        pickerFrameLayout.addView(pickerLayout);
+    }
+
+    private void removeAllPickerLayouts() {
+        while (pickerFrameLayout.getChildCount() > 1) {
+            pickerFrameLayout.removeViewAt(pickerFrameLayout.getChildCount()-1);
+        }
+    }
+
+    private int getBottomLinearLayoutBottomMargin() {
+        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) bottomLinearLayout.getLayoutParams();
+        return p.bottomMargin;
+    }
+
+    private void setBottomLinearLayoutBottomMargin(int bottomMargin) {
+        setMargins(bottomLinearLayout, 0, 0, 0, bottomMargin);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        keyboardView = findViewById(R.id.keyboard_view);
+        pickerFrameLayout = findViewById(R.id.picker_frame_layout);
+        bottomLinearLayout = findViewById(R.id.bottom_linear_layout);
 
+        bottomLinearLayout.
         findViewById(R.id.image_button_0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,12 +97,10 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
             keyboardVisible = imeVisible;
 
-            Log.i("CHEOK", "init keyboardVisible = " + keyboardVisible);
-
             if (keyboardVisible) {
                 keyboardHeightWhenVisible = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
 
-                if (keyboardView.getChildCount() > 0) {
+                if (hasPickerLayout()) {
                     slideDownThenRemoveAllViews();
                 }
 
@@ -98,11 +133,11 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
             @Override
             public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
                 if (keyboardVisible) {
-                    if (keyboardView.getHeight() == getGoodKeyboardViewHeight()) {
+                    if (getBottomLinearLayoutBottomMargin() == getGoodKeyboardViewHeight()) {
                         return insets;
                     }
                 } else {
-                    if (keyboardView.getChildCount() > 0) {
+                    if (hasPickerLayout()) {
                         return insets;
                     }
                 }
@@ -124,10 +159,8 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
                     }
 
                     keyboardViewHeight = Math.max(0, keyboardViewHeight);
-                    
-                    ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
-                    params.height = keyboardViewHeight;
-                    keyboardView.setLayoutParams(params);
+
+                    setBottomLinearLayoutBottomMargin(keyboardViewHeight);
                 }
                 return insets;
 
@@ -139,7 +172,9 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
     }
 
     private void slideDownThenRemoveAllViews() {
-        View view = keyboardView.getChildAt(0);
+        bottomLinearLayout.setVisibility(View.VISIBLE);
+        
+        final View view = getPickerLayout();
 
         Animation slideDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
 
@@ -151,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                keyboardView.removeAllViews();
+                removeAllPickerLayouts();
             }
 
             @Override
@@ -206,14 +241,6 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
             return;
         }
 
-        ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
-        params.height = getGoodKeyboardViewHeight();
-        keyboardView.setLayoutParams(params);
-
-        BackgroundPicker backgroundPicker = new BackgroundPicker(this, this);
-        keyboardView.removeAllViews();
-        keyboardView.addView(backgroundPicker);
-
         hideKeyboard();
     }
 
@@ -222,14 +249,12 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
             return;
         }
 
-        ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
-        params.height = getGoodKeyboardViewHeight();
-        keyboardView.setLayoutParams(params);
-        keyboardView.requestLayout();
+        setBottomLinearLayoutBottomMargin(getGoodKeyboardViewHeight());
 
         PickerLayout pickerLayout = new PickerLayout(this, Picker.Emoji, this);
-        keyboardView.removeAllViews();
-        keyboardView.addView(pickerLayout);
+        removeAllPickerLayouts();
+        addPickerLayout(pickerLayout);
+        bottomLinearLayout.setVisibility(View.INVISIBLE);
 
         hideKeyboard();
     }
@@ -237,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
     @Override
     public void onBackPressed() {
         if (!keyboardVisible) {
-            if (keyboardView.getChildCount() > 0) {
+            if (hasPickerLayout()) {
                 shrinkHeightThenRemoveAllViews();
                 return;
             }
@@ -248,15 +273,14 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
     private void shrinkHeightThenRemoveAllViews() {
         ValueAnimator shrinkAnimator = ValueAnimator
-                .ofInt(keyboardView.getHeight(), 0)
+                .ofInt(getBottomLinearLayoutBottomMargin(), 0)
                 .setDuration(150);
 
         shrinkAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 Integer value = (Integer) valueAnimator.getAnimatedValue();
-                keyboardView.getLayoutParams().height = value.intValue();
-                keyboardView.requestLayout();
+                setBottomLinearLayoutBottomMargin(value);
             }
         });
 
@@ -270,12 +294,14 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
 
             @Override
             public void onAnimationEnd(@NonNull Animator animator) {
-                keyboardView.removeAllViews();
+                removeAllPickerLayouts();
+                bottomLinearLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationCancel(@NonNull Animator animator) {
-                keyboardView.removeAllViews();
+                removeAllPickerLayouts();
+                bottomLinearLayout.setVisibility(View.VISIBLE);
             }
 
             @Override

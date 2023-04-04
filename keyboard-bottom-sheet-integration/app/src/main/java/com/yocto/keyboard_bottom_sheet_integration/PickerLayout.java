@@ -1,6 +1,7 @@
 package com.yocto.keyboard_bottom_sheet_integration;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ public class PickerLayout extends LinearLayout {
     private void init() {
         inflate(getContext(), R.layout.picker_layout, this);
 
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        setBackgroundColor(Color.WHITE);
         setOrientation(VERTICAL);
 
         this.titleTextView = findViewById(R.id.title_text_view);
