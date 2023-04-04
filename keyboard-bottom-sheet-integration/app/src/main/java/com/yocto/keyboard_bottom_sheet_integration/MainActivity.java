@@ -225,10 +225,11 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
         ViewGroup.LayoutParams params = keyboardView.getLayoutParams();
         params.height = getGoodKeyboardViewHeight();
         keyboardView.setLayoutParams(params);
+        keyboardView.requestLayout();
 
-        EmojiPicker emojiPicker = new EmojiPicker(this, this);
+        PickerLayout pickerLayout = new PickerLayout(this, Picker.Emoji, this);
         keyboardView.removeAllViews();
-        keyboardView.addView(emojiPicker);
+        keyboardView.addView(pickerLayout);
 
         hideKeyboard();
     }
