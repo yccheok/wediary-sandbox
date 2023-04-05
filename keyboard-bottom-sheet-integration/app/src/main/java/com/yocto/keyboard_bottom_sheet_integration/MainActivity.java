@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
     }
 
     private void addPickerLayout(PickerLayout pickerLayout) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                bottomLinearLayout.getHeight() + getBottomLinearLayoutBottomMargin()
+        );
+        pickerLayout.setLayoutParams(layoutParams);
+
         pickerFrameLayout.addView(pickerLayout);
     }
 
