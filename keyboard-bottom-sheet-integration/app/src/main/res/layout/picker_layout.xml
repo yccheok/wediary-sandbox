@@ -2,8 +2,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="android.widget.LinearLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <!-- Use clickable="true", to prevent click event propagate to underneath view -->
