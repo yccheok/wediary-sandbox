@@ -37,7 +37,7 @@
         </ScrollView>
 
         <FrameLayout
-            android:background="#ffffff"
+            android:background="#d0d0d0"
 
             android:id="@+id/picker_frame_layout"
             android:layout_width="match_parent"
