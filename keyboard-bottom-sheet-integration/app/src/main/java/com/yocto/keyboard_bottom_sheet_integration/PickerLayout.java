@@ -26,7 +26,6 @@ public class PickerLayout extends LinearLayout {
     private void init() {
         inflate(getContext(), R.layout.picker_layout, this);
 
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         setBackgroundColor(Color.WHITE);
         setOrientation(VERTICAL);
 
@@ -39,6 +38,8 @@ public class PickerLayout extends LinearLayout {
             titleTextView.setText("Emoji");
 
             EmojiPicker emojiPicker = new EmojiPicker(this.getContext(), this.pickerListener);
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            emojiPicker.setLayoutParams(layoutParams);
             addView(emojiPicker);
         } else if (picker == Picker.Background) {
             throw new RuntimeException();
