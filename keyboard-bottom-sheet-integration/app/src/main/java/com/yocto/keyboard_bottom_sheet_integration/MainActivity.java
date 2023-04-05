@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements PickerListener {
         pickerFrameLayout = findViewById(R.id.picker_frame_layout);
         bottomLinearLayout = findViewById(R.id.bottom_linear_layout);
 
-        bottomLinearLayout.
-        findViewById(R.id.image_button_0).setOnClickListener(new View.OnClickListener() {
+        bottomLinearLayout.findViewById(R.id.image_button_0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 backgroundPicker();
