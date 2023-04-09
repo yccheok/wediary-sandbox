@@ -1,7 +1,6 @@
 package com.yocto.keyboard_bottom_sheet_integration;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.widget.LinearLayout;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -33,11 +32,11 @@ public class EmojiPicker extends LinearLayout {
 
         EmojiPickerAdapter emojiPickerAdapter = new EmojiPickerAdapter(getContext());
         this.viewPager.setAdapter(emojiPickerAdapter);
-        this.viewPager.setOffscreenPageLimit(emojiPickerAdapter.getItemCount()-1);
+        this.viewPager.setOffscreenPageLimit(1);
 
         LinearLayout tabsContainer = (LinearLayout) tabLayout.getChildAt(0);
 
-        new TabLayoutMediator(tabLayout, viewPager, true, true,
+        new TabLayoutMediator(tabLayout, viewPager, true, false,
                 (tab, position) -> {
                     tab.setCustomView(R.layout.emoji_category_tab);
 
