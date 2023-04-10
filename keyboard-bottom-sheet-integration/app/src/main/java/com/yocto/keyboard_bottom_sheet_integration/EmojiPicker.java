@@ -32,11 +32,11 @@ public class EmojiPicker extends LinearLayout {
 
         EmojiPickerAdapter emojiPickerAdapter = new EmojiPickerAdapter(getContext());
         this.viewPager.setAdapter(emojiPickerAdapter);
-        this.viewPager.setOffscreenPageLimit(1);
+        this.viewPager.setOffscreenPageLimit(emojiPickerAdapter.getItemCount()-1);
 
         LinearLayout tabsContainer = (LinearLayout) tabLayout.getChildAt(0);
 
-        new TabLayoutMediator(tabLayout, viewPager, true, false,
+        new TabLayoutMediator(tabLayout, viewPager, true, true,
                 (tab, position) -> {
                     tab.setCustomView(R.layout.emoji_category_tab);
 
