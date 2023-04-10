@@ -57,6 +57,8 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Emoji emoji = emojis.get(position);
 
+        holder.textView.setOnClickListener(view -> Log.i("CHEOK", "id = " + emoji.id));
+
         holder.textView.setText(emoji.unicode);
     }
 
