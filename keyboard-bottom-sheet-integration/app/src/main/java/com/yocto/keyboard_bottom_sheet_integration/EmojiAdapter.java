@@ -56,6 +56,21 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> 
             Log.i("CHEOK", "id = " + emoji.id);
         });
 
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                final int adapterPosition = viewHolder.getAdapterPosition();
+
+                Emoji emoji = emojis.get(adapterPosition);
+
+                EmojiPopup emojiPopup = new EmojiPopup(view, emoji);
+
+                emojiPopup.show();
+
+                return true;
+            }
+        });
+
         return viewHolder;
     }
 
