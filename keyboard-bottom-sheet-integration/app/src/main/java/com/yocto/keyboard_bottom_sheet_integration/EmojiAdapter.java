@@ -42,6 +42,7 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.emoji_adapter, parent, false);
 
+        // Make sure it is "square" size.
         final ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
         int col = Utils.getScreenWidth() / Utils.dpToPixel(48);
         int widthPerCol = Utils.getScreenWidth() / col;
