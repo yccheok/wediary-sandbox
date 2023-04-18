@@ -36,6 +36,7 @@ public class EmojiPicker extends LinearLayout {
 
         LinearLayout tabsContainer = (LinearLayout) tabLayout.getChildAt(0);
 
+        // https://issuetracker.google.com/issues/277062770
         new TabLayoutMediator(tabLayout, viewPager, true, true,
                 (tab, position) -> {
                     tab.setCustomView(R.layout.emoji_category_tab);
