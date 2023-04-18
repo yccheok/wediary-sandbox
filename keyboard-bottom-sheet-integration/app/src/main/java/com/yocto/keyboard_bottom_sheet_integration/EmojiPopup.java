@@ -7,9 +7,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +45,7 @@ public class EmojiPopup {
         Context context = targetView.getContext();
 
         this.view = View.inflate(context, R.layout.emoji_popup, null);
+        this.view.setVisibility(View.INVISIBLE);
 
         this.recyclerView = this.view.findViewById(R.id.recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 6);
@@ -53,14 +57,44 @@ public class EmojiPopup {
         // So that the popup window will dismiss if we touch anywhere.
         popupWindow.setOutsideTouchable(true);
 
-        popupWindow.setOnDismissListener(() -> Log.i("CHEOK", "Pop up window is dismissed"));
+        int targetViewHeight = targetView.getHeight();
+        popupWindow.showAsDropDown(targetView, 0, 0);
 
-        final int[] location = new int[2];
-        targetView.getLocationOnScreen(location);
-        int x = location[0];
-        int y = location[1];
-        Log.i("CHEOK", x + ", " + y);
-        //popupWindow.showAtLocation(targetView, Gravity.NO_GRAVITY, x, y);
-        popupWindow.showAsDropDown(targetView, 0, -350);
+        final int[] locations = new int[2];
+        targetView.getLocationOnScreen(locations);
+        final int targetViewX = locations[0];
+        final int targetViewWidth = targetView.getWidth();
+
+        Utils.onGlobalLayout(view, () -> {
+            popupWindow.getContentView(). getLocationOnScreen(locations);
+            int popupWindowX = locations[0];
+
+            // We can now obtain the height of view. Now, we need to dismiss it first, before
+            // showing the popupWindow in correct position again.
+            popupWindow.dismiss();
+
+            popupWindow.setOnDismissListener(() -> Log.i("CHEOK", "Pop up window is dismissed"));
+
+            final int yOffset = -targetViewHeight-view.getHeight();
+
+            popupWindow.showAsDropDown(targetView, 0, yOffset);
+
+            ImageView arrowImageView = view.findViewById(R.id.arrow_image_view);
+            CardView cardView = view.findViewById(R.id.cardview);
+
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams)arrowImageView.getLayoutParams();
+            ViewGroup.MarginLayoutParams cardViewMarginLayoutParams = (ViewGroup.MarginLayoutParams)cardView.getLayoutParams();
+            final int cardViewMarginStart = cardViewMarginLayoutParams.getMarginStart();
+
+            // Not quite sure why two cardViewMarginStart is required.
+            marginLayoutParams.leftMargin =
+                    (targetViewWidth) / 2 +
+                    -cardViewMarginStart -cardViewMarginStart +
+                    (targetViewX - popupWindowX);
+
+            arrowImageView.setLayoutParams(marginLayoutParams);
+
+            view.setVisibility(View.VISIBLE);
+        });
     }
 }
